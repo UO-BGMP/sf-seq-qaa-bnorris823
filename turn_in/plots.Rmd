@@ -1,0 +1,312 @@
+---
+title: "PS1"
+author: "Brandon Norris"
+date: "9/28/2017"
+output: html_document
+---
+
+```{r include = F}
+R1_2C_qd <- read.table("R1_2C_qd.txt")
+R1_2C_rf <- read.table("R1_2C_rf.txt")
+R2_2C_qd <- read.table("R2_2C_qd.txt")
+R2_2C_rf <- read.table("R2_2C_rf.txt")
+
+R1_2D_qd <- read.table("R1_2D_qd.txt")
+R1_2D_rf <- read.table("R1_2D_rf.txt")
+R2_2D_qd <- read.table("R2_2D_qd.txt")
+R2_2D_rf <- read.table("R2_2D_rf.txt")
+
+R1_4_2C_L <- read.table("../4_2C/4_2C_R1_lengths.txt")
+R2_4_2C_L <- read.table("../4_2C/4_2C_R2_lengths.txt")
+
+R1_6_2D_L <- read.table("../6_2D/6_2D_R1_lengths.txt")
+R2_6_2D_L <- read.table("../6_2D/6_2D_R2_lengths.txt")
+
+strandData2 <- read.table("strandData2.csv", sep = ",", header = TRUE)
+```
+Part 1
+---
+FastQC commands
+
+    module load easybuild
+
+    module load FastQC/0.11.5-Java-1.8.0_131
+
+    fastqc 4_2C_mbnl_S4_L008_R1_001.fastq
+
+    fastqc 4_2C_mbnl_S4_L008_R2_001.fastq
+
+    fastqc 6_2D_mbnl_S5_L008_R1_001.fastq
+
+    fastqc 6_2D_mbnl_S5_L008_R2_001.fastq
+
+**4_2C_mnbl average base pair quality distribution**
+
+FastQC 4_2C_mnbl forward read bp average quality distribution
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/4_2C/R1_zip/4_2C_mbnl_S4_L008_R1_001_fastqc/Images/per_base_quality.png)
+FastQC 4_2C_mnbl reverse read bp average quality distribution
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/4_2C/R2_zip/4_2C_mbnl_S4_L008_R2_001_fastqc/Images/per_base_quality.png)
+
+My Script plots
+```{r}
+plot(R1_2C_qd, pch = 19, col = "steel blue", main = "4_2C_mnbl forward read bp avg qual score distribution", xlab = "bp position", ylab = "Quality score")
+
+plot(R2_2C_qd, pch = 19, col = "forest green", main = "4_2C_mnbl Reverse read bp avg qual score distribution", xlab = "bp position", ylab = "Quality score")
+```
+
+**4_2C_mnbl Average Read Quality Frequency**
+
+FastQC 4_2C_mnbl Forward Average Read Quality Frequency
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/4_2C/R1_zip/4_2C_mbnl_S4_L008_R1_001_fastqc/Images/per_sequence_quality.png)
+FastQC 4_2C_mnbl Reverse Average read Quality Frequency
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/4_2C/R2_zip/4_2C_mbnl_S4_L008_R2_001_fastqc/Images/per_sequence_quality.png)
+
+Script Plots
+```{r}
+plot(R1_2C_rf, pch = 19, col = "steel blue", main = "4_2C_mnbl forward read average read quality frequency dostribution", xlab = "quality score", ylab = "Number of reads", type = 'l')
+
+plot(R2_2C_rf, pch = 19, col = "forest green", main = "4_2C_mnbl reverse read average read quality frequency dostribution", xlab = "quality score", ylab = "Number of reads", type = 'l')
+```
+
+**6_2D_mnbl average base pair quality distribution**
+
+FastQC 6_2D_mnbl Forward Read Average Base Pair Quality Distribution
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/6_2D/R1_zip/6_2D_mbnl_S5_L008_R1_001_fastqc/Images/per_base_quality.png)
+FastQC 6_2D_mnbl Reverse Read Average Base Pair Quality Distribution
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/6_2D/R2_zip/6_2D_mbnl_S5_L008_R2_001_fastqc/Images/per_base_quality.png)
+
+```{r}
+plot(R1_2D_qd, pch = 19, col = "steel blue", main = "6_2D_mnbl forward read bp avg qual score distribution", xlab = "bp position", ylab = "Quality score")
+
+plot(R2_2D_qd, pch = 19, col = "forest green", main = "6_2D_mnbl Reverse read bp avg qual score distribution", xlab = "bp position", ylab = "Quality score")
+```
+
+**6_2D_mnbl Average Read Quality Frequency**
+
+FastQC 6_2D_mnbl Forward Average Read Quality Frequency
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/6_2D/R1_zip/6_2D_mbnl_S5_L008_R1_001_fastqc/Images/per_sequence_quality.png)
+FastQC 6_2D_mnbl Reverse Average Read Quality Frequency
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/6_2D/R2_zip/6_2D_mbnl_S5_L008_R2_001_fastqc/Images/per_sequence_quality.png)
+
+```{r}
+plot(R1_2D_rf, pch = 19, col = "steel blue", main = "6_2D_mnbl forward read average read quality frequency distribution", xlab = "quality score", ylab = "Number of reads", type = 'l')
+
+plot(R2_2D_rf, pch = 19, col = "forest green", main = "6_2D_mnbl reverse read average read quality frequency distribution", xlab = "quality score", ylab = "Number of reads", type = 'l')
+```
+
+The quality distrubutions for both libraries look very similar between FastQC and my own script from the index hopping assignment. The runtime was much faster for FastQC, however, which is probably due to being highly optimized and maybe using faster data structures specific to Java, which FastQC is written in.
+
+**Per base N content**
+
+As seen below, the per-base N content is consistent with the per base quality scores. The higher proportion of N content at the first few nucleotides is consistent with the lower average quality of the first few base positions.
+
+4_2C forward
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/4_2C/R1_zip/4_2C_mbnl_S4_L008_R1_001_fastqc/Images/per_base_n_content.png)
+
+4_2C Reverse
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/4_2C/R2_zip/4_2C_mbnl_S4_L008_R2_001_fastqc/Images/per_base_n_content.png)
+
+6_2D Forward
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/6_2D/R1_zip/6_2D_mbnl_S5_L008_R1_001_fastqc/Images/per_base_n_content.png)
+
+6_2D Reverse
+
+![](/Users/brandon/BI624/sf-seq-qaa-bnorris823/6_2D/R2_zip/6_2D_mbnl_S5_L008_R2_001_fastqc/Images/per_base_n_content.png)
+
+The per-base N content is consistent with the per base quality scores. The higher proportion of N content at the first few nucleotides is consistent with the lower average quality of the first few base positions.
+
+Part 2
+---
+
+At their core all three programs are able to trim adapters and filter for quality.
+
+Cutadapt is unique because it can trim many different types of adapters. For example, five prime or five and three prime.
+
+Trimmomatic stands out because of its ability to perform palindrome trimming. Which according to the manual is, "the appropriate adapter sequences are 'in silico ligated' onto the start of the reads, and the combined adapter+read sequences, forward and reverse are aligned. If they align in a manner which indicates 'read-through', the forward read is clipped and the reverse read dropped." 
+
+Stacks special because of its incorporation of rescuing barcodes and keep track of orphand reads.
+
+These are just a few things that I found while reading through the documentation. I am sure there are probably more detailed differeneces that I missed.
+
+For the trimming of the reads I ended up using process_shortreads. Here are the sbatch scripts I submitted.
+
+    module purge
+
+    module load slurm easybuild intel/2017a Stacks/1.46
+
+    process_shortreads -P -1 /home/bnorris8/BI624/PS1/4_2C/4_2C_mbnl_S4_L008_R1_001.fastq -2  /home/bnorris8/BI624/PS1/4_2C/4_2C_mbnl_S4_L008_R2_001.fastq -o /home/bnorris8/BI624/PS1/4_2C/output/ --adapter_1 AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC --adapter_2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -c -q
+    
+    module purge
+
+    module load slurm easybuild intel/2017a Stacks/1.46
+
+    process_shortreads -P -1 /home/bnorris8/BI624/PS1/6_2D/6_2D_mbnl_S5_L008_R1_001.fastq -2 /home/bnorris8/BI624/PS1/6_2D/6_2D_mbnl_S5_L008_R2_001.fastq -o /home/bnorris8/BI624/PS1/6_2D/output/ --adapter_1 AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC --adapter_2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT -c -q
+
+
+```{r warning = F}
+plot(R1_4_2C_L$V2, R1_4_2C_L$V1, type = "p", col = "blue", log = "y", main = "4_2C_mnbl trimmed forward and reverse reads length distribution", xlab = "Read length", ylab = "Frequency")
+
+points(R2_4_2C_L$V2, R2_4_2C_L$V1, type = "p", col = "red", log = "y", main = "Processed forward and reverse reads length distribution", xlab = "Read length", ylab = "Frequency", add = T)
+```
+
+```{r warning = F}
+plot(R1_6_2D_L$V2, R1_6_2D_L$V1, type = "p", col = "blue", log = "y", main = "6_2D_mnbl trimmed forward and reverse reads length distribution", xlab = "Read length", ylab = "Frequency")
+
+points(R2_6_2D_L$V2, R2_6_2D_L$V1, type = "p", col = "red", log = "y", main = "Processed forward and reverse reads length distribution", xlab = "Read length", ylab = "Frequency", add = T)
+```
+
+The plots show that the majority of the reads in the libraries after trimming are 101 bp long.
+
+untrimmed number of reads
+
+    [bnorris8@n028 4_2C]$ awk 'NR % 4 == 2 {print}' 4_2C_mbnl_S4_L008_R1_001.fastq | wc -l
+    9265284
+    [bnorris8@n028 4_2C]$ awk 'NR % 4 == 2 {print}' 4_2C_mbnl_S4_L008_R2_001.fastq | wc -l
+    9265284
+    
+    [bnorris8@n028 6_2D]$ awk 'NR % 4 == 2 {print}' 6_2D_mbnl_S5_L008_R1_001.fastq | wc -l
+    11028244
+    [bnorris8@n028 6_2D]$ awk 'NR % 4 == 2 {print}' 6_2D_mbnl_S5_L008_R2_001.fastq | wc -l
+    11028244
+    
+Trimmed number of reads
+
+    [bnorris8@n028 output]$ zcat 4_2C_mbnl_S4_L008_R1_001.1.fq.gz | awk 'NR % 4 == 2 {print}' | wc -l
+    9044668
+    [bnorris8@n028 output]$ zcat 4_2C_mbnl_S4_L008_R2_001.2.fq.gz | awk 'NR % 4 == 2 {print}' | wc -l
+    9044668
+    
+    [bnorris8@n028 output]$ zcat 6_2D_mbnl_S5_L008_R1_001.1.fq.gz | awk 'NR % 4 == 2 {print}' | wc -l
+    10774265
+    [bnorris8@n028 output]$ zcat 6_2D_mbnl_S5_L008_R2_001.2.fq.gz | awk 'NR % 4 == 2 {print}' | wc -l
+    10774265
+
+```{r}
+untrimmed_4_2C <- as.numeric(9265284) 
+untrimmed_6_2D <- as.numeric(11028244) 
+
+trimmed_4_2C <- as.numeric(9044668)
+trimmed_6_2D <- as.numeric(10774265)
+
+prop_4_2C <- ((untrimmed_4_2C / trimmed_4_2C) * 100) - 100
+prop_4_2C
+
+prop_6_2D <- ((untrimmed_6_2D / trimmed_6_2D) * 100) - 100
+prop_6_2D
+```
+
+The proportion of reads with adapter sequences was very small, about 2.5 % each. This makes sense because the insert size was around 400 - 500 bp. The size makes it very unlikely that any one read would run into the the adapter sequence.
+
+Part 3
+---
+
+First, I downloaded the ncRNA file for the mouse from ensembl.
+
+    wget ftp://ftp.ensembl.org/pub/release-90/fasta/mus_musculus.ncrna/Mus_musculus.GRCm38.ncrna.fa.gz
+
+I grepped out everything except for the reads containing rRNA.
+
+    zcat mus_musculus.ncrna/Mus_musculus.GRCm38.ncrna.fa.gz | grep "transcript_biotype:rRNA" > mouse_rRNA.fa
+
+Next I used the mouse_rRNA.fa file to build a gmap database.
+
+    gmap_build -d m_rRNA mouse_rRNA.fa
+    
+Then I ran output from process shortreads through GSNAP.
+
+    module load gmap-gsnap/2017-09-11
+
+    gsnap -D /home/bnorris8/BI624/PS1/gmap_gsnap/ -d m_rRNA  -t 8 -O --allow-pe-name-mismatch --split-output gsnap1_out -A sam --gunzip -m 20 /home/bnorris8/BI624/PS1/gmap_gsnap/4_2C_mbnl_S4_L008_R1_001.1.fq.gz /home/bnorris8/BI624/PS1/gmap_gsnap/4_2C_mbnl_S4_L008_R2_001.2.fq.gz
+    
+    module load gmap-gsnap/2017-09-11
+
+    gsnap -D /home/bnorris8/BI624/PS1/gmap_gsnap -d m_rRNA  -t 8 -O --allow-pe-name-mismatch --split-output gsnap2_out -A sam --gunzip -m 20 /home/bnorris8/BI624/PS1/gmap_gsnap/6_2D_mbnl_S5_L008_R1_001.1.fq.gz /home/bnorris8/BI624/PS1/gmap_gsnap/6_2D_mbnl_S5_L008_R2_001.2.fq.gz
+
+To determine the number of reads that mapped to the rRNA I counted how many reads were in the nomapping files output by GSNAP and compared that to the number of reads input into GSNAP.
+
+Find total number of reads input to gsnap
+
+    [bnorris8@n028 output]$ zcat 4_2C_mbnl_S4_L008_R1_001.1.fq.gz | awk 'NR % 4 == 2 {print}' | wc -l
+    9044668
+
+    [bnorris8@n028 output]$ zcat 6_2D_mbnl_S5_L008_R1_001.1.fq.gz | awk 'NR % 4 == 2 {print}' | wc -l
+    10774265
+
+Find total number of reads that did not map to reference
+
+    [bnorris8@n028 gmap_gsnap]$ grep -v "^@" gsnap1_out.nomapping | awk 'NR % 2 == 0 {print}' | wc -l
+    9044668
+
+    [bnorris8@n028 gmap_gsnap]$ grep -v "^@" gsnap2_out.nomapping | awk 'NR % 2 == 0 {print}' | wc -l
+    10774265
+
+For both libraries the number of reads input into GSNAP was equal to the number of reads that did not map to the rRNA database. This suggests that there was no rRNA comtamination in the libraries. This seems unrealistic however and I have doubts about setup of the rRNA database and/or my GSNAP commands.
+
+To demonstrate that the data is strand specific I used GMAP output which shows strandedness.
+
+First, I downloaded the mouse cDNA file from ensembl and made a GMAP database out of it.
+
+    gmap_build -D /home/bnorris8/BI624/PS1/gmap_gsnap/ -d mouse_cDNA -g Mus_musculus.GRCm38.cdna.all.fa.gz
+    
+Than I ran GMAP using a 100,000 lines from each read file.
+
+    gmap -D /home/bnorris8/BI624/PS1/gmap_gsnap/ -d mouse_cDNA 4_2C_R1_gmap_test.fq
+    gmap -D /home/bnorris8/BI624/PS1/gmap_gsnap/ -d mouse_cDNA 4_2C_R2_gmap_test.fq
+    gmap -D /home/bnorris8/BI624/PS1/gmap_gsnap/ -d mouse_cDNA 6_2D_R1_gmap_test.fq
+    gmap -D /home/bnorris8/BI624/PS1/gmap_gsnap/ -d mouse_cDNA 6_2D_R2_gmap_test.fq
+    
+Next I grepped for the strandedness of each read on counted it.
+
+4_2C R1
+
+    [bnorris8@ln1 gmap_gsnap]$ grep '(- strand' gmap4_2C_R1.out | wc -l
+    57884
+    [bnorris8@ln1 gmap_gsnap]$ grep '(+ strand' gmap4_2C_R1.out | wc -l
+    1781
+    
+4_2C R2    
+
+    [bnorris8@n067 gmap_gsnap]$ grep "(- strand" gmap4_2C_R2.out | wc -l
+    1732
+    [bnorris8@n067 gmap_gsnap]$ grep "(+ strand" gmap4_2C_R2.out | wc -l
+    58225
+   
+6_2D R1
+
+    [bnorris8@n067 gmap_gsnap]$ grep "(- strand" gmap6_2D_R1.out | wc -l
+    58138
+    [bnorris8@n067 gmap_gsnap]$ grep "(+ strand" gmap6_2D_R1.out | wc -l
+    1519
+
+6_2D R2
+   
+    [bnorris8@n067 gmap_gsnap]$ grep "(- strand" gmap4_2C.out | wc -l
+    1494
+    [bnorris8@n067 gmap_gsnap]$ grep "(+ strand" gmap4_2C.out | wc -l
+    58258
+   
+The strandedness is seen by looking at difference in numbers between each file. The R1 files in both libraries have a majority of - strand while the opposite is true for the R2 files. This relationship can also be seen in the plot below.
+
+```{r}
+par(mfrow = c(2,2))
+
+barplot(strandData2$X4_2C_R1, main = "4_2C_R1", xlab = "Minus Strand Plus Strand", ylab = "Number of Reads", col = "steel blue")
+barplot(strandData2$X4_2C_R2, main = "4_2C_R2", xlab = "Minus Strand Plus Strand", ylab = "Number of Reads", col = "steel blue")
+barplot(strandData2$X6_2D_R1, main = "6_2D_R1", xlab = "Minus Strand Plus Strand", ylab = "Number of Reads", col = "forest green")
+barplot(strandData2$X6_2D_R2, main = "6_2D_R2", xlab = "Minus Strand Plus Strand", ylab = "Number of Reads", col = "forest green")
+
+```
+   
+   
+   
